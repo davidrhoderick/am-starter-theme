@@ -99,7 +99,7 @@ class ArtlyticalMediaStarterSite extends Timber\Site {
     add_action('wp_enqueue_scripts', array($this, 'add_typekit'));
     add_action('wp_enqueue_scripts', array($this, 'add_googlefonts'));
     
-		add_action('wp_enqueue_scripts', array($this, 'add_googleanalytics'));
+    add_action('wp_enqueue_scripts', array($this, 'remove_wp_block_library_css'));
 		
 		/* If having issues with password protected links, try code below: */
     // add_filter('allowed_redirect_hosts', array($this, 'amend_redirect_hosts'), 10, 2);
@@ -107,7 +107,12 @@ class ArtlyticalMediaStarterSite extends Timber\Site {
     add_action('admin_menu', array($this, 'add_options_pages'));
 		
 		parent::__construct();
-	}
+  }
+  
+  public function remove_wp_block_library_css() {
+    wp_dequeue_style('wp-block-library');
+    wp_dequeue_style('wp-block-library-theme');
+  }
   
   public function add_options_pages() {
     acf_add_options_page(array(
@@ -387,22 +392,6 @@ class ArtlyticalMediaStarterSite extends Timber\Site {
       wp_enqueue_style('googlefonts', $google_fonts);
     }
   }
-
-  public function add_googleanalytics() {
-    if(get_field('google_analytics_code', 'options')) {
-      wp_register_script('ga', 'https://www.googletagmanager.com/gtag/js?id=' . get_field('google_analytics_code', 'options'));
-      wp_enqueue_script('ga');
-      ?>
-          <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', '<?php the_field('google_analytics_code', 'options') ?>');
-          </script>
-      <?php
-    }
-	}
 
   public function load_stylesheet() {
 		wp_enqueue_style('style', get_stylesheet_uri(), false, filemtime(get_stylesheet_directory() . '/style.css'));
