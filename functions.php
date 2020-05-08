@@ -380,14 +380,14 @@ class ArtlyticalMediaStarterSite extends Timber\Site {
   }
 
   public function add_typekit() {
-    $adobe_typekit = get_field('adobe_typekit', 'options');
+    $adobe_typekit = get_field('fonts', 'options')['providers']['adobe_typekit'];
     if($adobe_typekit) {
       wp_enqueue_style('adobetypekit', $adobe_typekit);
     }
   }
 
   public function add_googlefonts() {
-    $google_fonts = get_field('google_fonts', 'options');
+    $google_fonts = get_field('fonts', 'options')['providers']['google_fonts'];
     if($google_fonts) {
       wp_enqueue_style('googlefonts', $google_fonts);
     }
